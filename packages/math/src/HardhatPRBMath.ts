@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BigNumber } from "@ethersproject/bignumber";
+import { Decimal } from "decimal.js";
+import fp from "evm-fp";
 import { HardhatPluginError } from "hardhat/plugins";
-import type { MathJsStatic, BigNumber as MathjsBigNumber } from "mathjs";
+import type { BigNumber as MathjsBigNumber } from "mathjs";
 import {
   addDependencies,
   bignumberDependencies,
@@ -19,38 +22,51 @@ import {
 
 import { HALF_SCALE, PLUGIN_NAME, SCALE } from "./constants";
 
+const math = create(
+  {
+    addDependencies,
+    bignumberDependencies,
+    ceilDependencies,
+    expDependencies,
+    floorDependencies,
+    logDependencies,
+    log10Dependencies,
+    log2Dependencies,
+    meanDependencies,
+    modDependencies,
+    powDependencies,
+    sqrtDependencies,
+  },
+  {
+    number: "BigNumber",
+    precision: 79,
+  },
+);
+const mbn = math.bignumber!;
+
+// See https://stackoverflow.com/a/65172703/3873510
+// Rounds down because that is how Solidity handles division.
+Decimal.prototype.toFixedWithNoTrailingZeros = function () {
+  const decimals: number = 18;
+  return this.toFixed(decimals, Decimal.ROUND_DOWN).replace(/(\.0*|(?<=(\..*))0*)$/, "");
+};
+
 export class HardhatPRBMath {
-  protected math: Partial<MathJsStatic>;
-  protected mbn;
-
-  constructor() {
-    const config = {
-      number: "BigNumber",
-      precision: 79,
-    };
-    this.math = create(
-      {
-        addDependencies,
-        bignumberDependencies,
-        ceilDependencies,
-        expDependencies,
-        floorDependencies,
-        logDependencies,
-        log10Dependencies,
-        log2Dependencies,
-        meanDependencies,
-        modDependencies,
-        powDependencies,
-        sqrtDependencies,
-      },
-      config,
-    );
-    this.mbn = this.math.bignumber!;
-  }
-
+  /**
+   * @param x UD60x18 fixed-point number.
+   * @param y UD60x18 fixed-point number.
+   * @returns The result as a UD60x18 fixed-point number.
+   */
   public avg(x: BigNumber, y: BigNumber): BigNumber;
-  public avg(x: string, y: string): string;
-  public avg(x: BigNumber | string, y: BigNumber | string): BigNumber | string {
+
+  /**
+   * @param x Basic fixed-point number.
+   * @param y Basic fixed-point number.
+   * @returns The result as a UD60x18 fixed-point number.
+   */
+  public avg(x: string, y: string): BigNumber;
+
+  public avg(x: BigNumber | string, y: BigNumber | string): BigNumber {
     if (x instanceof BigNumber && y instanceof BigNumber) {
       let result: BigNumber = x.div(2).add(y.div(2));
       const xModTwo: BigNumber = this.solidityMod(x, BigNumber.from(2));
@@ -62,13 +78,22 @@ export class HardhatPRBMath {
       }
       return result;
     } else if (typeof x === "string" && typeof y === "string") {
-      const result = this.math.mean!(this.mbn(x), this.mbn(y)) as MathjsBigNumber;
-      return result.toString();
+      const result = math.mean!(mbn(x), mbn(y)) as MathjsBigNumber;
+      return fp(result.toFixedWithNoTrailingZeros());
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid inputs in "avg" method: x: ${x}, y: ${y}`);
   }
 
+  /**
+   * @param x UD60x18 fixed-point number.
+   * @returns The result as a UD60x18 fixed-point number.
+   */
   public ceil(x: BigNumber): BigNumber;
+
+  /**
+   * @param x Basic fixed-point number.
+   * @returns The result as a UD60x18 fixed-point number.
+   */
   public ceil(x: string): string;
   public ceil(x: BigNumber | string): BigNumber | string {
     if (x instanceof BigNumber) {
@@ -83,8 +108,8 @@ export class HardhatPRBMath {
         return result;
       }
     } else if (typeof x === "string") {
-      const result = this.mbn(x).ceil() as MathjsBigNumber;
-      return result.toString();
+      const result = mbn(x).ceil() as MathjsBigNumber;
+      return result.toFixedWithNoTrailingZeros();
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid input in "ceil" method: x: ${x}`);
   }
@@ -95,22 +120,21 @@ export class HardhatPRBMath {
     if (x instanceof BigNumber && y instanceof BigNumber) {
       return x.mul(SCALE).div(y);
     } else if (typeof x === "string" && typeof y === "string") {
-      const result = this.mbn(x).div(this.mbn(y)) as MathjsBigNumber;
-      return result.toString();
+      const result = mbn(x).div(mbn(y)) as MathjsBigNumber;
+      return result.toFixedWithNoTrailingZeros();
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid inputs in "div" method: x: ${x}, y: ${y}`);
   }
 
   public exp(x: string): string {
-    const result = this.mbn(x).exp() as MathjsBigNumber;
-    return result.toString();
+    const result = mbn(x).exp() as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public exp2(x: string): string {
-    const two: MathjsBigNumber = this.mbn("2");
-    const x_mbn: MathjsBigNumber = this.mbn(x);
-    const result = this.math.pow!(two, x_mbn) as MathjsBigNumber;
-    return result.toString();
+    const two: MathjsBigNumber = mbn("2");
+    const result = math.pow!(two, mbn(x)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public floor(x: BigNumber): BigNumber;
@@ -128,8 +152,8 @@ export class HardhatPRBMath {
         return result;
       }
     } else if (typeof x === "string") {
-      const result = this.mbn(x).floor() as MathjsBigNumber;
-      return result.toString();
+      const result = mbn(x).floor() as MathjsBigNumber;
+      return result.toFixedWithNoTrailingZeros();
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid input in "floor" method: x: ${x}`);
   }
@@ -146,9 +170,9 @@ export class HardhatPRBMath {
   }
 
   public gm(x: string, y: string): string {
-    const product: MathjsBigNumber = this.mbn(x).mul(this.mbn(y));
-    const result = this.math.sqrt!(product) as MathjsBigNumber;
-    return result.toString();
+    const product: MathjsBigNumber = mbn(x).mul(mbn(y));
+    const result = math.sqrt!(product) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public inv(x: BigNumber): BigNumber;
@@ -158,27 +182,26 @@ export class HardhatPRBMath {
       const result: BigNumber = SCALE.mul(SCALE).div(x);
       return result;
     } else if (typeof x === "string") {
-      const scale: MathjsBigNumber = this.mbn("1");
-      const x_mbn: MathjsBigNumber = this.mbn(x);
-      const result = scale.mul(scale).div(x_mbn) as MathjsBigNumber;
-      return result.toString();
+      const scale: MathjsBigNumber = mbn("1");
+      const result = scale.mul(scale).div(mbn(x)) as MathjsBigNumber;
+      return result.toFixedWithNoTrailingZeros();
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid input in "inv" method: x: ${x}`);
   }
 
   public ln(x: string): string {
-    const result = this.math.log!(this.mbn(x)) as MathjsBigNumber;
-    return result.toString();
+    const result = math.log!(mbn(x)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public log10(x: string): string {
-    const result = this.math.log10!(this.mbn(x)) as MathjsBigNumber;
-    return result.toString();
+    const result = math.log10!(mbn(x)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public log2(x: string): string {
-    const result = this.math.log2!(this.mbn(x)) as MathjsBigNumber;
-    return result.toString();
+    const result = math.log2!(mbn(x)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public max(x: BigNumber, y: BigNumber): BigNumber;
@@ -187,9 +210,7 @@ export class HardhatPRBMath {
     if (x instanceof BigNumber && y instanceof BigNumber) {
       return x.gte(y) ? x : y;
     } else if (typeof x === "string" && typeof y === "string") {
-      const x_mbn: MathjsBigNumber = this.mbn(x);
-      const y_mbn: MathjsBigNumber = this.mbn(y);
-      return x_mbn.gte(y_mbn) ? x : y;
+      return mbn(x).gte(mbn(y)) ? x : y;
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid inputs in "max" method: x: ${x}, y: ${y}`);
   }
@@ -208,20 +229,20 @@ export class HardhatPRBMath {
       const result: BigNumber = doubleScaledProductWithHalfScale.div(SCALE);
       return result;
     } else if (typeof x === "string" && typeof y === "string") {
-      const result = this.mbn(x).mul(this.mbn(y)) as MathjsBigNumber;
-      return result.toString();
+      const result = mbn(x).mul(mbn(y)) as MathjsBigNumber;
+      return result.toFixedWithNoTrailingZeros();
     }
     throw new HardhatPluginError(PLUGIN_NAME, `Invalid inputs in "mul" method: x: ${x}, y: ${y}`);
   }
 
   public pow(x: string, y: string): string {
-    const result = this.math.pow!(this.mbn(x), this.mbn(y)) as MathjsBigNumber;
-    return result.toString();
+    const result = math.pow!(mbn(x), mbn(y)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   public sqrt(x: string): string {
-    const result = this.math.sqrt!(this.mbn(x)) as MathjsBigNumber;
-    return result.toString();
+    const result = math.sqrt!(mbn(x)) as MathjsBigNumber;
+    return result.toFixedWithNoTrailingZeros();
   }
 
   protected solidityMod(x: BigNumber, y: BigNumber): BigNumber;
@@ -234,9 +255,8 @@ export class HardhatPRBMath {
       }
       return remainder;
     } else if (typeof x === "string" && typeof m === "string") {
-      const x_mbn: MathjsBigNumber = this.mbn(x);
-      const m_mbn: MathjsBigNumber = this.mbn(m);
-      let remainder = x_mbn.mod(m_mbn) as MathjsBigNumber;
+      const m_mbn: MathjsBigNumber = mbn(m);
+      let remainder = mbn(x).mod(mbn(m)) as MathjsBigNumber;
       if (!remainder.isZero() && remainder.isNegative()) {
         remainder = remainder.sub(m_mbn);
       }

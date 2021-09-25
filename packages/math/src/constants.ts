@@ -4,6 +4,8 @@ function bn(x: string): BigNumber {
   return BigNumber.from(x);
 }
 
+// TODO: should these be big numbers or strings ???
+
 export const DECIMALS = bn("18");
 export const HALF_SCALE = bn("500000000000000000");
 export const MAX_SD59x18 = bn("57896044618658097711785492504343953926634992332820282019728792003956564819967");
