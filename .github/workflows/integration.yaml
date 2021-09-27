@@ -1,0 +1,54 @@
+name: "Continuous Integration"
+
+env:
+  COVERAGE_GIT_BRANCH: "main"
+  COVERAGE_SERVICE_NAME: "github-actions-ci"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  push:
+    branches:
+      - "main"
+
+jobs:
+  run-math-integration:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: "actions/checkout@v2"
+
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v2"
+        with:
+          cache: "yarn"
+          node-version: "16"
+
+      - name: "Install the dependencies"
+        run: "yarn install --immutable"
+
+      - name: "Lint the code"
+        run: "yarn workspace hardhat-prb-math lint"
+
+      - name: "Run the tests and generate coverage report"
+        run: "yarn workspace hardhat-prb-math coverage"
+
+      - name: "Prepare coverage report"
+        uses: "coverallsapp/github-action@master"
+        with:
+          flag-name: "math"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+          path-to-lcov: "./packages/math/coverage/lcov.info"
+
+  upload-coverage-report:
+    needs:
+      - "run-math-integration"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Upload coverage reports to Coveralls"
+        uses: "coverallsapp/github-action@master"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

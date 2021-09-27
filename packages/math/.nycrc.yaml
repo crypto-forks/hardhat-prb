@@ -1,0 +1,6 @@
+extends: "../../.nycrc.yaml"
+exclude:
+  - "src/constants/**/*.ts"
+  - "src/errors.ts"
+include:
+  - "src/**/*.ts"
