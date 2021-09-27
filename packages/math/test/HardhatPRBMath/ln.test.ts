@@ -1,7 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import forEach from "mocha-each";
 
 import { EPSILON } from "../shared/constants";
@@ -17,7 +17,7 @@ export function shouldBehaveLikeLn(): void {
   context("when x is not zero", function () {
     context("when x is negative", function () {
       it("throws an error", function () {
-        const x: BigNumber = fp("-1");
+        const x: BigNumber = toBn("-1");
         expect(() => this.hre.prb.math.ln(x)).toThrow("Cannot calculate the natural logarithm of a negative number");
       });
     });
@@ -43,8 +43,8 @@ export function shouldBehaveLikeLn(): void {
       ];
 
       forEach(testSets).it("takes %f and returns the correct value", function (x: string) {
-        const expected: number = Number(fp(String(Math.log(Number(x)))));
-        const result: number = Number(this.hre.prb.math.ln(fp(x)));
+        const expected: number = Number(toBn(String(Math.log(Number(x)))));
+        const result: number = Number(this.hre.prb.math.ln(toBn(x)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
       });
     });

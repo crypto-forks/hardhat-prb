@@ -2,13 +2,13 @@ import { expect } from "earljs";
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import forEach from "mocha-each";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 
 export function shouldBehaveLikeMul(): void {
   context("when one of the operands is zero", function () {
     const testSets = [
-      [fp("0.5"), Zero],
-      [Zero, fp("0.5")],
+      [toBn("0.5"), Zero],
+      [Zero, toBn("0.5")],
     ];
 
     forEach(testSets).it("takes %e and %e and returns 0", function (x: BigNumber, y: BigNumber) {
@@ -36,8 +36,8 @@ export function shouldBehaveLikeMul(): void {
       ]);
 
       forEach(testSets).it("takes %f and %f and returns the correct value", async function (x: string, y: string) {
-        const expected: number = Number(fp(String(Number(x) * Number(y))));
-        const result: number = Number(this.hre.prb.math.mul(fp(x), fp(y)));
+        const expected: number = Number(toBn(String(Number(x) * Number(y))));
+        const result: number = Number(this.hre.prb.math.mul(toBn(x), toBn(y)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: 1e3 }));
       });
     });
@@ -60,8 +60,8 @@ export function shouldBehaveLikeMul(): void {
       ]);
 
       forEach(testSets).it("takes %f and %f and returns the correct value", async function (x: string, y: string) {
-        const expected: number = Number(fp(String(Number(x) * Number(y))));
-        const result: number = Number(this.hre.prb.math.mul(fp(x), fp(y)));
+        const expected: number = Number(toBn(String(Number(x) * Number(y))));
+        const result: number = Number(this.hre.prb.math.mul(toBn(x), toBn(y)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: 1e3 }));
       });
     });

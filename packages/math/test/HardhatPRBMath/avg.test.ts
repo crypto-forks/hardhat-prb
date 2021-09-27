@@ -1,7 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import forEach from "mocha-each";
 
 export function shouldBehaveLikeAvg(): void {
@@ -16,10 +16,10 @@ export function shouldBehaveLikeAvg(): void {
 
   context("when one operand is zero and the other is not zero", function () {
     const testSets = [
-      [fp("-3"), fp("0"), fp("-1.5")],
-      [fp("0"), fp("-3"), fp("-1.5")],
-      [fp("0"), fp("3"), fp("1.5")],
-      [fp("3"), fp("0"), fp("1.5")],
+      [toBn("-3"), toBn("0"), toBn("-1.5")],
+      [toBn("0"), toBn("-3"), toBn("-1.5")],
+      [toBn("0"), toBn("3"), toBn("1.5")],
+      [toBn("3"), toBn("0"), toBn("1.5")],
     ];
 
     forEach(testSets).it("takes %e and %e and returns %e", function (x: BigNumber, y: BigNumber, expected: BigNumber) {
@@ -29,10 +29,10 @@ export function shouldBehaveLikeAvg(): void {
 
   context("when one operand is negative and the other is positive", function () {
     const testSets = [
-      [fp("-4"), fp("4"), fp("0")],
-      [fp("-2"), fp("8"), fp("3")],
-      [fp("4"), fp("-4"), fp("0")],
-      [fp("8"), fp("-2"), fp("3")],
+      [toBn("-4"), toBn("4"), toBn("0")],
+      [toBn("-2"), toBn("8"), toBn("3")],
+      [toBn("4"), toBn("-4"), toBn("0")],
+      [toBn("8"), toBn("-2"), toBn("3")],
     ];
 
     forEach(testSets).it("takes %e and %e and returns %e", function (x: BigNumber, y: BigNumber, expected: BigNumber) {
@@ -42,10 +42,10 @@ export function shouldBehaveLikeAvg(): void {
 
   context("when both operands are negative", function () {
     const testSets = [
-      [fp("-100"), fp("-200"), fp("-150")],
-      [fp("-4"), fp("-8"), fp("-6")],
-      [fp("-1"), fp("-2"), fp("-1.5")],
-      [fp("-1"), fp("-1"), fp("-1")],
+      [toBn("-100"), toBn("-200"), toBn("-150")],
+      [toBn("-4"), toBn("-8"), toBn("-6")],
+      [toBn("-1"), toBn("-2"), toBn("-1.5")],
+      [toBn("-1"), toBn("-1"), toBn("-1")],
     ];
 
     forEach(testSets).it("takes %e and %e and returns %e", function (x: BigNumber, y: BigNumber, expected: BigNumber) {
@@ -56,9 +56,9 @@ export function shouldBehaveLikeAvg(): void {
   context("when both operands are positive", function () {
     context("when both operands are odd", function () {
       const testSets = [
-        [fp("1e-18"), fp("1e-18"), fp("1e-18")],
-        [fp("3e-18"), fp("7e-18"), fp("5e-18")],
-        [fp("99e-18"), fp("199e-18"), fp("149e-18")],
+        [toBn("1e-18"), toBn("1e-18"), toBn("1e-18")],
+        [toBn("3e-18"), toBn("7e-18"), toBn("5e-18")],
+        [toBn("99e-18"), toBn("199e-18"), toBn("149e-18")],
       ];
 
       forEach(testSets).it(
@@ -71,9 +71,9 @@ export function shouldBehaveLikeAvg(): void {
 
     context("when both operands are even", function () {
       const testSets = [
-        [fp("2"), fp("2"), fp("2")],
-        [fp("4"), fp("8"), fp("6")],
-        [fp("100"), fp("200"), fp("150")],
+        [toBn("2"), toBn("2"), toBn("2")],
+        [toBn("4"), toBn("8"), toBn("6")],
+        [toBn("100"), toBn("200"), toBn("150")],
       ];
 
       forEach(testSets).it(
@@ -86,9 +86,9 @@ export function shouldBehaveLikeAvg(): void {
 
     context("when one operand is even and the other is odd", function () {
       const testSets = [
-        [fp("1e-18"), fp("2e-18"), fp("1e-18")],
-        [fp("3e-18"), fp("8e-18"), fp("5e-18")],
-        [fp("99e-18"), fp("200e-18"), fp("149e-18")],
+        [toBn("1e-18"), toBn("2e-18"), toBn("1e-18")],
+        [toBn("3e-18"), toBn("8e-18"), toBn("5e-18")],
+        [toBn("99e-18"), toBn("200e-18"), toBn("149e-18")],
       ];
 
       forEach(testSets).it(

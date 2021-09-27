@@ -1,7 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import forEach from "mocha-each";
 
 export function shouldBehaveLikeFrac(): void {
@@ -16,13 +16,13 @@ export function shouldBehaveLikeFrac(): void {
   context("when x is not zero", function () {
     context("when x is negative", function () {
       const testSets = [
-        [fp("-4.2"), fp("-0.2")],
-        [fp("-3.14"), fp("-0.14")],
-        [fp("-2"), Zero],
-        [fp("-1.125"), fp("-0.125")],
-        [fp("-1"), Zero],
-        [fp("-0.5"), fp("-0.5")],
-        [fp("-0.1"), fp("-0.1")],
+        [toBn("-4.2"), toBn("-0.2")],
+        [toBn("-3.14"), toBn("-0.14")],
+        [toBn("-2"), Zero],
+        [toBn("-1.125"), toBn("-0.125")],
+        [toBn("-1"), Zero],
+        [toBn("-0.5"), toBn("-0.5")],
+        [toBn("-0.1"), toBn("-0.1")],
       ];
 
       forEach(testSets).it("takes %e and returns %e", function (x: BigNumber, expected: BigNumber) {
@@ -32,13 +32,13 @@ export function shouldBehaveLikeFrac(): void {
 
     context("when x is positive", function () {
       const testSets = [
-        [fp("0.1"), fp("0.1")],
-        [fp("0.5"), fp("0.5")],
-        [fp("1"), Zero],
-        [fp("1.125"), fp("0.125")],
-        [fp("2"), Zero],
-        [fp("3.14"), fp("0.14")],
-        [fp("4.2"), fp("0.2")],
+        [toBn("0.1"), toBn("0.1")],
+        [toBn("0.5"), toBn("0.5")],
+        [toBn("1"), Zero],
+        [toBn("1.125"), toBn("0.125")],
+        [toBn("2"), Zero],
+        [toBn("3.14"), toBn("0.14")],
+        [toBn("4.2"), toBn("0.2")],
       ];
 
       forEach(testSets).it("takes %e and returns %e", function (x: BigNumber, expected: BigNumber) {

@@ -1,7 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import forEach from "mocha-each";
 
 import { EPSILON } from "../shared/constants";
@@ -10,7 +10,7 @@ export function shouldBehaveLikeExp2(): void {
   context("when x is zero", function () {
     it("returns 1", function () {
       const x: BigNumber = Zero;
-      const expected: BigNumber = fp("1");
+      const expected: BigNumber = toBn("1");
       expect(expected).toEqual(this.hre.prb.math.exp2(x));
     });
   });
@@ -19,8 +19,8 @@ export function shouldBehaveLikeExp2(): void {
     const testSets = ["-20.82", "-16", "-11.89215", "-4", "-3.14", "-3", "-2.71", "-2", "-1"];
 
     forEach(testSets).it("takes %f and returns the correct value", function (x: string) {
-      const expected: number = Number(fp(String(Math.pow(2, Number(x)))));
-      const result: number = Number(this.hre.prb.math.exp2(fp(x)));
+      const expected: number = Number(toBn(String(Math.pow(2, Number(x)))));
+      const result: number = Number(this.hre.prb.math.exp2(toBn(x)));
       expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
     });
   });
@@ -29,8 +29,8 @@ export function shouldBehaveLikeExp2(): void {
     const testSets = ["1", "2", "2.71", "3", "3.14", "4", "11.89215", "16", "20.82"];
 
     forEach(testSets).it("takes %f and returns the correct value", function (x: string) {
-      const expected: number = Number(fp(String(Math.pow(2, Number(x)))));
-      const result: number = Number(this.hre.prb.math.exp2(fp(x)));
+      const expected: number = Number(toBn(String(Math.pow(2, Number(x)))));
+      const result: number = Number(this.hre.prb.math.exp2(toBn(x)));
       expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
     });
   });

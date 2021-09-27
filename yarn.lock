@@ -3714,15 +3714,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"evm-fp@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "evm-fp@npm:1.2.0"
+"evm-bn@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "evm-bn@npm:1.0.0"
   dependencies:
     "@ethersproject/bignumber": ^5.4.2
     from-exponential: ^1.1.1
   peerDependencies:
     "@ethersproject/bignumber": ^5.4.2
-  checksum: 53337f7ca7842a1f24f938fed4d94b2fe5fe892a819a52a4dd272a28056a53e469b14f00d05ecdf7e1be81141974f53b9a7e07e29614fb7d95c8ee7736017a7b
+  checksum: 6e55de21c633076830be3b23c4c2e0c1384d43d30f5c549df8035d2da44d88852568c08051d5b2ed4969503ce8e9b8a37513f41690ceb81afd458bf01761ecf0
   languageName: node
   linkType: hard
 
@@ -4592,7 +4592,7 @@ fsevents@~2.1.1:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     ethers: ^5.4.7
-    evm-fp: ^1.2.0
+    evm-bn: ^1.0.0
     from-exponential: ^1.1.1
     hardhat: ^2.6.4
     mathjs: ^9.4.5
@@ -4609,7 +4609,7 @@ fsevents@~2.1.1:
   peerDependencies:
     "@ethersproject/bignumber": ^5.4.2
     decimal.js: ^10.3.1
-    evm-fp: ^1.2.0
+    evm-bn: ^1.0.0
     hardhat: ^2.6.4
     mathjs: ^9.4.5
   languageName: unknown

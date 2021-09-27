@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BigNumber } from "@ethersproject/bignumber";
 import { Decimal } from "decimal.js";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import { HardhatPluginError } from "hardhat/plugins";
 import { BigNumber as MathjsBigNumber } from "mathjs";
 import {
@@ -49,7 +49,7 @@ BigNumber.prototype.toMbn = function () {
 
 Decimal.prototype.toFp = function () {
   const fixed = this.toFixed(Number(DECIMALS), Decimal.ROUND_DOWN);
-  return fp(fixed);
+  return toBn(fixed);
 };
 
 export class HardhatPRBMath {

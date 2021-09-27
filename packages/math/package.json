@@ -12,7 +12,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "decimal.js": "^10.3.1",
-    "evm-fp": "^1.2.0",
+    "evm-bn": "^1.0.0",
     "hardhat": "^2.6.4",
     "mathjs": "^9.4.5"
   },
@@ -72,7 +72,7 @@
   "peerDependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "decimal.js": "^10.3.1",
-    "evm-fp": "^1.2.0",
+    "evm-bn": "^1.0.0",
     "hardhat": "^2.6.4",
     "mathjs": "^9.4.5"
   },

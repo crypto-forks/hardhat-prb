@@ -1,6 +1,6 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import { expect } from "earljs";
 import forEach from "mocha-each";
 import { EPSILON } from "../shared/constants";
@@ -8,8 +8,8 @@ import { EPSILON } from "../shared/constants";
 export function shouldBehaveLikeGm(): void {
   context("when one of the operands is zero", function () {
     const testSets = [
-      [Zero, fp("3.14")],
-      [fp("3.14"), Zero],
+      [Zero, toBn("3.14")],
+      [toBn("3.14"), Zero],
     ];
 
     forEach(testSets).it("takes %e and %e and returns 0", function (x: BigNumber, y: BigNumber) {
@@ -21,10 +21,10 @@ export function shouldBehaveLikeGm(): void {
   context("when neither of the operands is zero", function () {
     context("when the product of x and y is negative", function () {
       const testSets = [
-        [fp("-7.1"), fp("20.05")],
-        [fp("-1"), fp("3.14")],
-        [fp("3.14"), fp("-1")],
-        [fp("7.1"), fp("-20.05")],
+        [toBn("-7.1"), toBn("20.05")],
+        [toBn("-1"), toBn("3.14")],
+        [toBn("3.14"), toBn("-1")],
+        [toBn("7.1"), toBn("-20.05")],
       ];
 
       forEach(testSets).it("takes %e and %e and throws an error", function (x: BigNumber, y: BigNumber) {
@@ -50,8 +50,8 @@ export function shouldBehaveLikeGm(): void {
       ]);
 
       forEach(testSets).it("takes %e and %e and returns the correct value", function (x: string, y: string) {
-        const expected: number = Number(fp(String(Math.sqrt(Number(x) * Number(y)))));
-        const result: number = Number(this.hre.prb.math.gm(fp(x), fp(y)));
+        const expected: number = Number(toBn(String(Math.sqrt(Number(x) * Number(y)))));
+        const result: number = Number(this.hre.prb.math.gm(toBn(x), toBn(y)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
       });
     });

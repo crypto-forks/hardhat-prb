@@ -1,7 +1,7 @@
 import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 import forEach from "mocha-each";
 
 import { EPSILON } from "../shared/constants";
@@ -19,8 +19,8 @@ export function shouldBehaveLikeInv(): void {
       const testSets = ["-2503", "-772.05", "-100.135", "-22", "-4", "-3.14", "-2", "-1", "-0.1", "-0.05"];
 
       forEach(testSets).it("takes %f and returns the correct value", function (x: string) {
-        const expected: number = Number(fp(String(1 / Number(x))));
-        const result: number = Number(this.hre.prb.math.inv(fp(x)));
+        const expected: number = Number(toBn(String(1 / Number(x))));
+        const result: number = Number(this.hre.prb.math.inv(toBn(x)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
       });
     });
@@ -29,8 +29,8 @@ export function shouldBehaveLikeInv(): void {
       const testSets = ["0.05", "0.1", "1", "2", "3.14", "4", "22", "100.135", "772.05", "2503"];
 
       forEach(testSets).it("takes %f and returns the correct value", function (x: string) {
-        const expected: number = Number(fp(String(1 / Number(x))));
-        const result: number = Number(this.hre.prb.math.inv(fp(x)));
+        const expected: number = Number(toBn(String(1 / Number(x))));
+        const result: number = Number(this.hre.prb.math.inv(toBn(x)));
         expect(expected).toEqual(expect.numberCloseTo(result, { delta: EPSILON }));
       });
     });

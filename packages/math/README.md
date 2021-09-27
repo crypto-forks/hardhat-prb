@@ -48,16 +48,16 @@ etc). For example, in your `hardhat.config.ts`:
 
 ```ts
 import type { BigNumber } from "@ethersproject/bignumber";
-import fp from "evm-fp";
+import { fromBn, toBn } from "evm-bn";
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 
 task("log2", "Calculate the binary logarithm")
   .addParam("x", "Input")
   .setAction(async function (taskArgs: TaskArguments, { prb }): Promise<void> {
-    const x: BigNumber = fp(taskArgs.x);
+    const x: BigNumber = toBn(taskArgs.x);
     const result: BigNumber = prb.math.log2(x);
-    console.log({ result: result.toString() });
+    console.log({ result: fromBn(result) });
   });
 
 export default {};

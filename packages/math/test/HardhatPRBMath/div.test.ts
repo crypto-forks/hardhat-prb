@@ -2,12 +2,12 @@ import type { BigNumber } from "@ethersproject/bignumber";
 import { Zero } from "@ethersproject/constants";
 import { expect } from "earljs";
 import forEach from "mocha-each";
-import fp from "evm-fp";
+import { toBn } from "evm-bn";
 
 export function shouldBehaveLikeDiv(): void {
   context("when the denominator is zero", function () {
     it("throws an error", function () {
-      const x: BigNumber = fp("1");
+      const x: BigNumber = toBn("1");
       const y: BigNumber = Zero;
       expect(() => this.hre.prb.math.div(x, y)).toThrow("Cannot divide by zero");
     });
@@ -15,7 +15,7 @@ export function shouldBehaveLikeDiv(): void {
 
   context("when the denominator is not zero", function () {
     context("when the numerator is zero", function () {
-      const testSets = [fp("-3.14"), fp("-1"), fp("1"), fp("3.14")];
+      const testSets = [toBn("-3.14"), toBn("-1"), toBn("1"), toBn("3.14")];
 
       forEach(testSets).it("takes %e and returns 0", function (y: BigNumber) {
         const x: BigNumber = Zero;
@@ -45,8 +45,8 @@ export function shouldBehaveLikeDiv(): void {
         ]);
 
         forEach(testSets).it("takes %e and %e and returns the correct value", function (x: string, y: string) {
-          const expected: number = Number(fp(String(Number(x) / Number(y))));
-          const result: number = Number(this.hre.prb.math.div(fp(x), fp(y)));
+          const expected: number = Number(toBn(String(Number(x) / Number(y))));
+          const result: number = Number(this.hre.prb.math.div(toBn(x), toBn(y)));
           expect(expected).toEqual(expect.numberCloseTo(result, { delta: 1e3 }));
         });
       });
@@ -71,8 +71,8 @@ export function shouldBehaveLikeDiv(): void {
         ]);
 
         forEach(testSets).it("takes %e and %e and returns the correct value", function (x: string, y: string) {
-          const expected: number = Number(fp(String(Number(x) / Number(y))));
-          const result: number = Number(this.hre.prb.math.div(fp(x), fp(y)));
+          const expected: number = Number(toBn(String(Number(x) / Number(y))));
+          const result: number = Number(this.hre.prb.math.div(toBn(x), toBn(y)));
           expect(expected).toEqual(expect.numberCloseTo(result, { delta: 1e3 }));
         });
       });
