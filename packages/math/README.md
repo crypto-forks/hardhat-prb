@@ -12,7 +12,7 @@ mirroring TypeScript implementations for the mathematical functions originally w
 First, install the plugin and its peer dependencies:
 
 ```sh
-yarn add --dev hardhat-prb-math decimal.js mathjs
+yarn add --dev hardhat-prb-math @ethersproject/bignumber evm-bn mathjs
 ```
 
 Second, import the plugin in your `hardhat.config.js`:
