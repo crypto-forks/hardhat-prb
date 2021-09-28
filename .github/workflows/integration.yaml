@@ -31,10 +31,10 @@ jobs:
       - name: "Lint the code"
         run: "yarn workspace hardhat-prb-math lint"
 
-      - name: "Run the tests and generate coverage report"
+      - name: "Run the tests and generate the coverage report"
         run: "yarn workspace hardhat-prb-math coverage"
 
-      - name: "Prepare coverage report"
+      - name: "Prepare the coverage report"
         uses: "coverallsapp/github-action@master"
         with:
           flag-name: "math"
@@ -47,7 +47,7 @@ jobs:
       - "run-math-integration"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Upload coverage reports to Coveralls"
+      - name: "Upload the coverage reports to Coveralls"
         uses: "coverallsapp/github-action@master"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

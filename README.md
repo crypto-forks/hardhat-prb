@@ -7,10 +7,9 @@ Monorepo implementing Hardhat plugins to complement the PRB smart contract libra
 Hardhat PRB is maintained with [yarn workspaces](https://yarnpkg.com/features/workspaces). Check out the README
 associated to each package for detailed usage instructions.
 
-| Package                                | Description                           |
-| -------------------------------------- | ------------------------------------- |
-| [`hardhat-prb-math`](/packages/math)   | Hardhat plugin to complement PRBMath  |
-| [`hardhat-prb-proxy`](/packages/proxy) | Hardhat plugin to complement PRBProxy |
+| Package                              | Description                          |
+| ------------------------------------ | ------------------------------------ |
+| [`hardhat-prb-math`](/packages/math) | Hardhat plugin to complement PRBMath |
 
 ## Contributing
 
