@@ -3,4 +3,4 @@ extends: "@istanbuljs/nyc-config-typescript"
 report-dir: "coverage"
 reporter:
   - "html"
-  - "lcov"
+  - "nyc-report-lcov-absolute"

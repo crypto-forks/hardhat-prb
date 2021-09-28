@@ -4599,6 +4599,7 @@ fsevents@~2.1.1:
     mocha: ^9.1.1
     mocha-each: ^2.0.1
     nyc: ^15.1.0
+    nyc-report-lcov-absolute: ^1.0.0
     pinst: ^2.1.6
     prettier: ^2.4.1
     shx: ^0.3.3
@@ -6988,6 +6989,15 @@ fsevents@~2.1.1:
   version: 1.0.1
   resolution: "number-is-nan@npm:1.0.1"
   checksum: 13656bc9aa771b96cef209ffca31c31a03b507ca6862ba7c3f638a283560620d723d52e626d57892c7fff475f4c36ac07f0600f14544692ff595abff214b9ffb
+  languageName: node
+  linkType: hard
+
+"nyc-report-lcov-absolute@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "nyc-report-lcov-absolute@npm:1.0.0"
+  peerDependencies:
+    istanbul-reports: ^3.0.0
+  checksum: 04e79b4fe105e823f804a386c46832866d7b416c9738e8d5816fab19595288e9edd8811a51173ab5aba5d6ca8a35989effac5c8ae5ab8ef99b90963b160faac2
   languageName: node
   linkType: hard
 
