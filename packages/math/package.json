@@ -1,7 +1,7 @@
 {
   "name": "hardhat-prb-math",
   "description": "Hardhat plugin to complement PRBMath",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Paul Razvan Berg",
     "url": "https://paulrberg.com"
