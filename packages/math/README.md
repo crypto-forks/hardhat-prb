@@ -63,9 +63,12 @@ task("log2", "Calculate the binary logarithm")
 export default {};
 ```
 
-Read the documentation on the [Hardhat Runtime
-Environment](https://hardhat.org/advanced/hardhat-runtime-environment.html) to learn how to access the HRE different
-ways. Also read the documentation on [PRBMath][1] to know all the
+### Tips
+
+- Read the documentation on the [Hardhat Runtime
+  Environment](https://hardhat.org/advanced/hardhat-runtime-environment.html) to learn how to access the HRE different ways.
+- Read the README in [PRBMath][1] to learn about all the functions available in the Solidity library.
+- See [how](https://github.com/hifi-finance/prb-math/tree/main/test) this plugin is used in PRBMath.
 
 ## License
 
